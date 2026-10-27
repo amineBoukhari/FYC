@@ -7,9 +7,12 @@ interface Props {
   href?: string;
   image?: ImageMetadata;
   imageAlt?: string;
+  // Niveau du titre selon le contexte : h2 directement sous le h1 de la page, h3 sous un h2.
+  level?: 2 | 3;
 }
 
-const { title, href, image, imageAlt = '' } = Astro.props;
+const { title, href, image, imageAlt = '', level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
 ---
 
 <article class="card">
@@ -24,7 +27,7 @@ const { title, href, image, imageAlt = '' } = Astro.props;
     )
   }
   <div class="body">
-    <h3>{href ? <a href={href}>{title}</a> : title}</h3>
+    <Heading class="title">{href ? <a href={href}>{title}</a> : title}</Heading>
     <slot />
   </div>
 </article>
@@ -48,11 +51,12 @@ const { title, href, image, imageAlt = '' } = Astro.props;
     padding: 1.5rem;
   }
 
-  h3 {
+  .title {
     margin-top: 0;
+    font-size: 1.2rem;
   }
 
-  h3 a {
+  .title a {
     color: inherit;
   }
 </style>

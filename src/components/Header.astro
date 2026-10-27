@@ -3,13 +3,19 @@ import { SITE } from '../data/site';
 
 const links = [
   { href: '/', label: 'Accueil' },
-  { href: '/projets', label: 'Projets' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/a-propos', label: 'À propos' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/projets/', label: 'Projets' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/a-propos/', label: 'À propos' },
+  { href: '/contact/', label: 'Contact' },
 ];
 
-const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const path = Astro.url.pathname;
+// Page courante : lien exact ; section courante : /blog/ reste actif sur /blog/un-article/.
+const state = (href: string) => {
+  if (path === href) return 'page';
+  if (href !== '/' && path.startsWith(href)) return 'true';
+  return undefined;
+};
 ---
 
 <header class="site-header">
@@ -20,7 +26,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
         {
           links.map(({ href, label }) => (
             <li>
-              <a href={href} aria-current={current === href ? 'page' : undefined}>
+              <a href={href} aria-current={state(href)}>
                 {label}
               </a>
             </li>
@@ -68,7 +74,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
     text-decoration: none;
   }
 
-  nav a[aria-current='page'] {
+  nav a[aria-current] {
     text-decoration: underline;
     text-decoration-color: #818cf8;
     text-decoration-thickness: 2px;

@@ -51,10 +51,11 @@ npm run dev        # http://localhost:4321
 | `video-05` | Modes de rendu : SSG, SSR et hybride | Adaptateur Cloudflare, formulaire de contact traité côté serveur (SSR)        |
 | `video-06` | Structurer le contenu (Content Collections) | Collections `projets` et `blog` typées avec Zod, pages liste + détail, MDX |
 | `video-07` | Performance et Core Web Vitals       | Images via `astro:assets` (WebP, `srcset`, `priority`), mesures Lighthouse avant/après |
+| `video-08` | Les fondamentaux techniques du SEO   | URL canoniques (`trailingSlash`, 301), page 404, hiérarchie des titres, fil d'Ariane, maillage interne |
 
 ### Vidéo 04 — Prise en main
 
-- **Routage par fichiers** : `src/pages/a-propos.astro` devient `/a-propos`.
+- **Routage par fichiers** : `src/pages/a-propos.astro` devient `/a-propos` (puis `/a-propos/` à partir de la vidéo 08).
 - **Composants** : un fichier `.astro` = un *frontmatter* (code exécuté au build, entre `---`) + un template HTML + un `<style>` automatiquement limité au composant.
 - **Composition** : `Card` est réutilisé sur l'accueil et la page projets ; `BaseLayout` factorise `<html>`, `<head>`, l'en-tête et le pied de page, chaque page y injecte son contenu via `<slot />`.
 - **Balises meta de base** : chaque page passe un `title` et une `description` au layout.
@@ -99,3 +100,11 @@ npm run dev        # http://localhost:4321
 - `priority` sur l'image candidate au LCP (hero, couverture d'article) : `loading="eager"` + `fetchpriority="high"`. Les autres images restent en `loading="lazy"`.
 - Dans les collections, le helper `image()` du schéma remplace la simple chaîne de caractères : un chemin d'image erroné fait échouer le build.
 - Détail des mesures et méthode : [`docs/performance.md`](docs/performance.md).
+
+### Vidéo 08 — Les fondamentaux techniques du SEO
+
+- **Une URL par page** : `trailingSlash: 'always'` → `/a-propos` redirige en 301 vers `/a-propos/` (avant : deux URL, même contenu). Cloudflare redirigerait en 307 (temporaire) : la mini-intégration `redirections301` génère un fichier `_redirects` qui impose des 301.
+- **Hiérarchie des titres** : `Card` reçoit un `level` pour ne jamais sauter de niveau (`h1` → `h2` → `h3`).
+- **Maillage interne** : composant `Breadcrumbs`, blocs « À lire aussi » et « Projets similaires », lien auteur → `/a-propos/`.
+- **Page 404** personnalisée (`src/pages/404.astro`), servie avec le bon code HTTP.
+- Panorama des briques SEO et de la vidéo où chacune est traitée : [`docs/seo-fondamentaux.md`](docs/seo-fondamentaux.md).

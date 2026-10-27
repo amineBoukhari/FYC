@@ -1,0 +1,48 @@
+---
+export interface Crumb {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+// Le dernier élément est la page courante : affiché sans lien.
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumbs" aria-label="Fil d'Ariane">
+  <ol>
+    {
+      items.map(({ label, href }, index) =>
+        index === items.length - 1 ? (
+          <li aria-current="page">{label}</li>
+        ) : (
+          <li>
+            <a href={href}>{label}</a>
+          </li>
+        ),
+      )
+    }
+  </ol>
+</nav>
+
+<style>
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+
+  li + li::before {
+    content: '/';
+    margin-right: 0.4rem;
+    color: var(--color-border);
+  }
+</style>

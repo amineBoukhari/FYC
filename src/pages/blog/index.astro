@@ -15,7 +15,7 @@ const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueO
     <div class="grid">
       {
         posts.map(({ id, data }) => (
-          <Card title={data.title} href={`/blog/${id}`} image={data.cover} imageAlt={data.coverAlt}>
+          <Card level={2} title={data.title} href={`/blog/${id}/`} image={data.cover} imageAlt={data.coverAlt}>
             <p class="date">
               <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time>
             </p>
