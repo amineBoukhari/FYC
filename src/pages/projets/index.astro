@@ -2,10 +2,14 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Card from '../../components/Card.astro';
+import ProjectFilter from '../../components/ProjectFilter.tsx';
 import JsonLd from '../../components/JsonLd.astro';
 import { collectionPageSchema, graph } from '../../utils/schema';
 
 const projets = (await getCollection('projets')).sort((a, b) => b.data.year - a.data.year);
+
+// Filtres proposés : la technologie principale (première de la stack) de chaque projet.
+const technologies = [...new Set(projets.map(({ data }) => data.stack[0]))].sort((a, b) => a.localeCompare(b, 'fr'));
 
 const description =
   'Sélection de projets web : sites statiques, applications React, PWA et e-commerce, avec la stack utilisée pour chacun.';
@@ -25,17 +29,63 @@ const schema = graph(
     <h1>Projets</h1>
     <p class="lead">Une sélection de projets personnels et professionnels, présentés sous forme d'études de cas.</p>
 
+    {/* Îlot : seul ce composant envoie du JavaScript, et seulement quand le navigateur est inactif. */}
+    <ProjectFilter client:idle technologies={technologies} target=".project-item" />
+
     <div class="grid">
       {
         projets.map(({ id, data }) => (
-          <Card level={2} title={data.title} href={`/projets/${id}/`} image={data.cover} imageAlt={data.coverAlt}>
-            <p>{data.summary}</p>
-            <ul class="tags" aria-label="Technologies">
-              {data.stack.map((tech) => <li>{tech}</li>)}
-            </ul>
-          </Card>
+          <div class="project-item" data-stack={data.stack.join('|')}>
+            <Card level={2} title={data.title} href={`/projets/${id}/`} image={data.cover} imageAlt={data.coverAlt}>
+              <p>{data.summary}</p>
+              <ul class="tags" aria-label="Technologies">
+                {data.stack.map((tech) => <li>{tech}</li>)}
+              </ul>
+            </Card>
+          </div>
         ))
       }
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  /* Le HTML de l'îlot n'est pas scopé par Astro : on cible ses classes avec :global(). */
+  :global(.filter) {
+    margin-block: 1.5rem;
+  }
+
+  :global(.filter .label) {
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+
+  :global(.filter .buttons) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  :global(.filter button) {
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  :global(.filter button[aria-pressed='true']) {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  :global(.filter .count) {
+    min-height: 1.6em;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+</style>

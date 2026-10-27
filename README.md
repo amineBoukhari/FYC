@@ -60,6 +60,7 @@ npm run dev        # http://localhost:4321
 | `video-10` | Données structurées et JSON-LD      | `Person`, `WebSite`, `ProfilePage`, `BlogPosting`, `CreativeWork`, `BreadcrumbList`, page `/faq/` + `FAQPage` |
 | `video-11` | Comprendre le GEO                    | Script `audit:geo`, grille d'audit de l'état actuel, note sur le fonctionnement des moteurs génératifs |
 | `video-12` | Optimiser un site Astro pour le GEO  | Article et accueil restructurés (réponse directe, questions, tableau, FAQ), `CollectionPage`, `llms.txt` |
+| `video-13` | Écosystème et intégrations Astro     | Premier îlot : filtre de projets en Preact (`client:idle`), poids JS mesuré, panorama des intégrations |
 
 ### Vidéo 04 — Prise en main
 
@@ -150,3 +151,10 @@ npm run dev        # http://localhost:4321
 - Audit : **76 → 85 / 97, 7 → 0 échec bloquant**. Avant / après détaillé : [`docs/audit-geo.md`](docs/audit-geo.md).
 
 > `llms.txt` est une **proposition** de standard (llmstxt.org, 2024) : les grands moteurs ne se sont pas engagés à l'utiliser. On l'adopte parce qu'il ne coûte rien et documente le site, pas comme un levier garanti.
+
+### Vidéo 13 — Écosystème et intégrations Astro
+
+- Intégration **Preact** (`@astrojs/preact`) et premier îlot : `ProjectFilter.tsx`, filtre des projets par technologie sur `/projets/`.
+- `client:idle` : le composant est hydraté quand le navigateur est inactif. Les cartes restent du HTML statique : sans JavaScript, tous les projets s'affichent (amélioration progressive).
+- Poids : **≈ 11 Ko gzip, sur `/projets/` uniquement** ; les 11 autres pages n'envoient toujours aucun JavaScript.
+- Tableau des directives `client:*` et panorama des intégrations (UI, Tailwind, CMS headless, Pagefind, Partytown…) : [`docs/ecosysteme.md`](docs/ecosysteme.md).

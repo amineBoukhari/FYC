@@ -4,6 +4,7 @@ import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import preact from '@astrojs/preact';
 
 // URL publique du site : indispensable pour les URL absolues (canonical, Open Graph, sitemap).
 // À surcharger au build : SITE_URL=https://mon-domaine.fr npm run build
@@ -50,6 +51,8 @@ export default defineConfig({
     redirections301,
     // MDX : Markdown + composants, pour les articles qui en ont besoin.
     mdx(),
+    // Preact : composants interactifs (îlots), ~4 Kio compressés une fois chargés.
+    preact(),
     // Sitemap généré au build à partir des pages prérendues.
     sitemap({
       // Les pages SSR ne sont pas connues au build : on les déclare explicitement.
