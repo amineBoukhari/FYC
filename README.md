@@ -59,6 +59,7 @@ npm run dev        # http://localhost:4321
 | `video-09` | Implémenter le SEO on-page dans Astro | Composant `SEO` (title, canonical, Open Graph), `site`, sitemap, robots.txt     |
 | `video-10` | Données structurées et JSON-LD      | `Person`, `WebSite`, `ProfilePage`, `BlogPosting`, `CreativeWork`, `BreadcrumbList`, page `/faq/` + `FAQPage` |
 | `video-11` | Comprendre le GEO                    | Script `audit:geo`, grille d'audit de l'état actuel, note sur le fonctionnement des moteurs génératifs |
+| `video-12` | Optimiser un site Astro pour le GEO  | Article et accueil restructurés (réponse directe, questions, tableau, FAQ), `CollectionPage`, `llms.txt` |
 
 ### Vidéo 04 — Prise en main
 
@@ -137,3 +138,15 @@ npm run dev        # http://localhost:4321
 - Fonctionnement d'un moteur de réponse (exploration → récupération de passages → génération → citation) et ce qui rend un passage « citable » : [`docs/geo-comprendre.md`](docs/geo-comprendre.md).
 - **Mesurer avant d'optimiser** : `npm run build && npm run audit:geo` analyse chaque page générée (un seul `h1`, hiérarchie des titres, réponse directe en tête, meta description, JSON-LD, date, titres en questions, listes/tableaux) et la présence d'un `llms.txt`.
 - Résultat actuel : **76 / 97 critères, 7 échecs bloquants**. Grille commentée et priorités : [`docs/audit-geo.md`](docs/audit-geo.md).
+
+### Vidéo 12 — Optimiser un site Astro pour le GEO
+
+- **Deux pages restructurées** :
+  - `blog/ssg-ssr-csr.md` : réponse « En bref » en tête, `h2` formulés en questions, tableau comparatif, FAQ en fin d'article, date de mise à jour ;
+  - l'accueil : une introduction autonome et citable (`SITE.intro` dans `src/data/site.ts`).
+- Champ `faq` optionnel dans le schéma `blog` : affiché en fin d'article **et** ajouté au JSON-LD (`FAQPage`).
+- `CollectionPage` + `ItemList` sur `/blog/` et `/projets/`.
+- **`/llms.txt`** (`src/pages/llms.txt.ts`) : titre `#`, résumé `>`, sections `##` de liens commentés, généré à partir des collections au build.
+- Audit : **76 → 85 / 97, 7 → 0 échec bloquant**. Avant / après détaillé : [`docs/audit-geo.md`](docs/audit-geo.md).
+
+> `llms.txt` est une **proposition** de standard (llmstxt.org, 2024) : les grands moteurs ne se sont pas engagés à l'utiliser. On l'adopte parce qu'il ne coûte rien et documente le site, pas comme un levier garanti.

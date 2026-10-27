@@ -6,7 +6,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import JsonLd from '../../components/JsonLd.astro';
 import { SITE } from '../../data/site';
 import { formatDate } from '../../utils/format';
-import { blogPostingSchema, breadcrumbSchema, graph } from '../../utils/schema';
+import { blogPostingSchema, breadcrumbSchema, faqSchema, graph } from '../../utils/schema';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -37,6 +37,7 @@ const site = Astro.site!;
 const schema = graph(
   blogPostingSchema(post, new URL(shareImage.src, site).href, site),
   breadcrumbSchema(crumbs, site),
+  ...(data.faq.length ? [faqSchema(data.faq)] : []),
 );
 ---
 
@@ -57,6 +58,7 @@ const schema = graph(
       <h1>{data.title}</h1>
       <p class="meta">
         Par <a href="/a-propos/">{SITE.author}</a> — publié le <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time>
+        {data.updatedDate && <span>, mis à jour le <time datetime={data.updatedDate.toISOString()}>{formatDate(data.updatedDate)}</time></span>}
       </p>
       <ul class="tags" aria-label="Thèmes">
         {data.tags.map((tag) => <li>{tag}</li>)}
@@ -66,6 +68,20 @@ const schema = graph(
     <div class="prose">
       <Content />
     </div>
+
+    {
+      data.faq.length > 0 && (
+        <section class="faq" aria-labelledby="faq-title">
+          <h2 id="faq-title">Questions fréquentes</h2>
+          {data.faq.map(({ question, answer }) => (
+            <>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </>
+          ))}
+        </section>
+      )
+    }
 
     <aside class="related" aria-labelledby="related-title">
       <h2 id="related-title">À lire aussi</h2>
@@ -101,6 +117,28 @@ const schema = graph(
     border-radius: 0.5rem;
     overflow-x: auto;
     font-size: 0.9rem;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .faq {
+    margin-top: 2.5rem;
+  }
+
+  .faq h3 {
+    margin-bottom: 0.25rem;
   }
 
   .related {

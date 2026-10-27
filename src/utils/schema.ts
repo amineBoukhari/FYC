@@ -90,6 +90,29 @@ export function projectSchema(projet: CollectionEntry<'projets'>, imageUrl: stri
   };
 }
 
+export function collectionPageSchema(
+  page: { name: string; description: string; path: string },
+  items: { name: string; path: string }[],
+  site: URL,
+): Schema {
+  return {
+    '@type': 'CollectionPage',
+    name: page.name,
+    description: page.description,
+    url: abs(page.path, site),
+    isPartOf: { '@id': websiteId(site) },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        url: abs(item.path, site),
+      })),
+    },
+  };
+}
+
 export function faqSchema(items: { question: string; answer: string }[]): Schema {
   return {
     '@type': 'FAQPage',

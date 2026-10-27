@@ -42,3 +42,38 @@ Score : **76 / 97** critères respectés — **7 échecs bloquants**.
 3. **`/blog/` et `/projets/`** — pas de données structurées et introduction trop courte sur `/blog/`. → `CollectionPage` + `ItemList`, introduction plus informative.
 4. **`llms.txt`** absent. → Le générer automatiquement à partir des collections.
 5. Non bloquant : les articles peuvent gagner des titres en questions et une FAQ finale.
+
+## État après optimisation — tag `video-12`
+
+Score : **85 / 97** critères respectés — **0 échec bloquant** (avant : 76 / 97, 7 échecs bloquants).
+
+| Page                            | h1 | hiérarchie | intro | description | jsonld | date | questions | structure |
+| ------------------------------- | -- | ---------- | ----- | ----------- | ------ | ---- | --------- | --------- |
+| `/`                             | ✅ | ✅         | ✅ ← ❌ | ✅        | ✅     | ✅   | ✅ ← ⚠️   | ✅        |
+| `/a-propos/`                    | ✅ | ✅         | ✅    | ✅          | ✅     | ✅   | ⚠️        | ✅        |
+| `/blog/`                        | ✅ | ✅         | ✅ ← ❌ | ✅        | ✅ ← ❌ | ✅  | ✅        | ⚠️        |
+| `/blog/optimiser-le-lcp/`       | ✅ | ✅         | ✅    | ✅          | ✅     | ✅   | ⚠️        | ✅        |
+| `/blog/reflexes-accessibilite/` | ✅ | ✅         | ✅    | ✅          | ✅     | ✅   | ⚠️        | ⚠️        |
+| `/blog/ssg-ssr-csr/`            | ✅ | ✅ ← ❌    | ✅ ← ❌ | ✅        | ✅     | ✅   | ✅        | ✅ ← ⚠️   |
+| `/faq/`                         | ✅ | ✅         | ✅    | ✅          | ✅     | ✅   | ✅        | ⚠️        |
+| `/projets/`                     | ✅ | ✅         | ✅    | ✅          | ✅ ← ❌ | ✅  | ⚠️        | ⚠️        |
+| `/projets/*` (4 études de cas)  | ✅ | ✅         | ✅    | ✅          | ✅     | ✅   | ⚠️        | ✅        |
+| **`llms.txt`**                  | ✅ ← ❌ 12 liens |  |  |  |  |  |  |  |
+
+### Corrections apportées
+
+| Problème                                              | Correction                                                                                      | Justification GEO |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------- |
+| Article SSG : anecdote de 93 mots avant la réponse    | Paragraphe **« En bref »** de 45 mots en tête, l'anecdote déplacée en dernière section          | Le premier passage répond seul à la question du titre |
+| Article SSG : `h3` directement sous le `h1`           | Sections en `h2`, formulées comme des **questions** (« Qu'est-ce que le rendu serveur ? »)       | Chaque section devient un passage autonome, aligné sur les requêtes |
+| Article SSG : comparaison diluée dans la prose        | **Tableau comparatif** SSG / SSR / CSR                                                          | Format directement extractible et reformulable |
+| Article SSG : pas de questions annexes                | **FAQ** en fin d'article (champ `faq` du frontmatter), décrite en `FAQPage` dans le JSON-LD      | Réponses courtes aux questions voisines |
+| Article SSG : pas de signal de fraîcheur              | `updatedDate` affichée (« mis à jour le … ») et reprise en `dateModified`                       | Les moteurs privilégient les contenus récents et datés |
+| Accueil : « Alex Morel, développement web… à Lyon. »  | Introduction autonome `SITE.intro` : qui, quoi, où, avec quoi, disponibilité                    | Citable sans le contexte du titre |
+| `/blog/`, `/projets/` sans données structurées        | `CollectionPage` + `ItemList`                                                                    | Décrit la liste des contenus de la section |
+| Pas d'index pour les agents IA                        | **`/llms.txt`** généré à partir des collections                                                 | Index Markdown des ressources clés, toujours à jour |
+
+### Pistes restantes (non bloquantes)
+
+- Formuler davantage de titres en questions sur `/a-propos/`, les études de cas et les deux autres articles.
+- Ajouter une FAQ aux articles `optimiser-le-lcp` et `reflexes-accessibilite`.

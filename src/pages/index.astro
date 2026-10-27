@@ -33,7 +33,7 @@ const posts = (await getCollection('blog'))
   <JsonLd slot="head" schema={graph(websiteSchema(Astro.site!), personSchema(Astro.site!))} />
   <Hero
     title="Je conçois des sites web rapides, accessibles et bien référencés"
-    subtitle={`${SITE.author}, ${SITE.role.toLowerCase()} à ${SITE.city}.`}
+    subtitle={SITE.intro}
   >
     <p class="actions">
       <a class="button" href="/projets/">Voir mes projets</a>
@@ -42,7 +42,7 @@ const posts = (await getCollection('blog'))
   </Hero>
 
   <section class="section container">
-    <h2>Ce que je fais</h2>
+    <h2>Que puis-je faire pour votre projet ?</h2>
     <div class="grid">
       {
         skills.map(({ title, text }) => (

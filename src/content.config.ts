@@ -32,6 +32,8 @@ const blog = defineCollection({
       cover: image(),
       coverAlt: z.string(),
       tags: z.array(z.string()).default([]),
+      // Questions / réponses affichées en fin d'article et décrites en FAQPage (GEO).
+      faq: z.array(z.object({ question: z.string().endsWith('?'), answer: z.string() })).default([]),
     }),
 });
 
