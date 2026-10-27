@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+---
+
+<BaseLayout
+  title="Contact"
+  description={`Contactez ${SITE.author} pour une mission freelance, un projet web ou une collaboration.`}
+>
+  <section class="section container">
+    <h1>Contact</h1>
+    <p class="lead">Un projet, une mission freelance ou simplement une question ? Écrivez-moi, je réponds sous 48 h.</p>
+
+    <ul>
+      <li>E-mail : <a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+      <li>GitHub : <a href={SITE.socials.github}>{SITE.socials.github.replace('https://', '')}</a></li>
+      <li>LinkedIn : <a href={SITE.socials.linkedin}>{SITE.socials.linkedin.replace('https://www.', '')}</a></li>
+    </ul>
+  </section>
+</BaseLayout>

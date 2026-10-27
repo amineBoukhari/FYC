@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+
+const timeline = [
+  { period: '2024 – aujourd’hui', title: 'Développement front-end en freelance', place: SITE.city },
+  { period: '2021 – 2024', title: 'Intégration et développement web en agence', place: 'Lyon' },
+  { period: '2019 – 2021', title: 'Licence professionnelle Métiers du numérique', place: 'Université' },
+];
+
+const stack = ['HTML', 'CSS', 'TypeScript', 'Astro', 'React', 'Svelte', 'Node.js', 'Docker', 'GitHub Actions'];
+---
+
+<BaseLayout
+  title="À propos"
+  description={`${SITE.author} : parcours, compétences et méthode de travail en développement front-end et performance web.`}
+>
+  <article class="section container about">
+    <h1>À propos</h1>
+    <p class="lead">Je m’appelle {SITE.author}. Depuis plusieurs années, je conçois des sites web qui se chargent vite, fonctionnent pour tout le monde et se trouvent facilement sur les moteurs de recherche.</p>
+
+    <h2>Ma façon de travailler</h2>
+    <p>Je pars toujours du contenu : qui va lire la page, qu’est-ce qu’on veut lui dire ? Ensuite seulement vient le choix technique. Pour un site vitrine ou un blog, un site statique suffit souvent ; pour une application, on ajoute de l’interactivité là où elle apporte vraiment quelque chose.</p>
+
+    <h2>Parcours</h2>
+    <ol class="timeline">
+      {
+        timeline.map(({ period, title, place }) => (
+          <li>
+            <span class="period">{period}</span>
+            <strong>{title}</strong>
+            <span class="place">{place}</span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <h2>Outils du quotidien</h2>
+    <ul class="tags">
+      {stack.map((tech) => <li>{tech}</li>)}
+    </ul>
+  </article>
+</BaseLayout>
+
+<style>
+  .about {
+    max-width: 48rem;
+  }
+
+  .timeline {
+    display: grid;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .timeline li {
+    display: grid;
+    padding-left: 1rem;
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .period,
+  .place {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Card from '../components/Card.astro';
+import { projects } from '../data/projects';
+---
+
+<BaseLayout
+  title="Projets"
+  description="Sélection de projets web : sites statiques, applications React, PWA et e-commerce, avec la stack utilisée pour chacun."
+>
+  <section class="section container">
+    <h1>Projets</h1>
+    <p class="lead">Une sélection de projets personnels et professionnels.</p>
+
+    <div class="grid">
+      {
+        projects.map(({ title, description, stack }) => (
+          <Card title={title}>
+            <p>{description}</p>
+            <ul class="tags" aria-label="Technologies">
+              {stack.map((tech) => <li>{tech}</li>)}
+            </ul>
+          </Card>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

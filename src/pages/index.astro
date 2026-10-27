@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Card from '../components/Card.astro';
+import { SITE } from '../data/site';
+import { projects } from '../data/projects';
+
+const skills = [
+  {
+    title: 'Front-end',
+    text: 'Interfaces en HTML sémantique, CSS moderne et TypeScript, avec Astro, React ou Svelte selon le besoin.',
+  },
+  {
+    title: 'Performance web',
+    text: 'Optimisation des Core Web Vitals : images, chargement du JavaScript, rendu côté serveur.',
+  },
+  {
+    title: 'SEO technique',
+    text: 'Balisage, données structurées, sitemap : des sites que les moteurs comprennent et indexent.',
+  },
+];
+---
+
+<BaseLayout title="Développement web front-end">
+  <Hero
+    title="Je conçois des sites web rapides, accessibles et bien référencés"
+    subtitle={`${SITE.author}, ${SITE.role.toLowerCase()} à ${SITE.city}.`}
+  >
+    <p class="actions">
+      <a class="button" href="/projets">Voir mes projets</a>
+      <a class="button ghost" href="/contact">Me contacter</a>
+    </p>
+  </Hero>
+
+  <section class="section container">
+    <h2>Ce que je fais</h2>
+    <div class="grid">
+      {
+        skills.map(({ title, text }) => (
+          <Card title={title}>
+            <p>{text}</p>
+          </Card>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section container">
+    <h2>Projets récents</h2>
+    <div class="grid">
+      {
+        projects.slice(0, 3).map(({ title, description }) => (
+          <Card title={title}>
+            <p>{description}</p>
+          </Card>
+        ))
+      }
+    </div>
+    <p><a href="/projets">Tous les projets →</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+</style>
