@@ -1,7 +1,7 @@
 {
   "name": "portfolio-fil-rouge",
   "type": "module",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "description": "Projet fil rouge du cours FYC « Astro & l'optimisation SEO / GEO » : portfolio de développeur",
   "engines": {
@@ -14,6 +14,10 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^14.4.2",
     "astro": "^7.4.2"
+  },
+  "devDependencies": {
+    "wrangler": "^4.153.0"
   }
 }

@@ -1,16 +1,87 @@
 ---
+// Rendu à la demande (SSR) : la page doit lire et traiter le formulaire envoyé en POST.
+// Toutes les autres pages du site restent prérendues au build.
+export const prerender = false;
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE } from '../data/site';
+
+type Field = 'name' | 'email' | 'message';
+
+let values: Record<Field, string> = { name: '', email: '', message: '' };
+let errors: Partial<Record<Field, string>> = {};
+let sent = false;
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  values = {
+    name: String(form.get('name') ?? '').trim(),
+    email: String(form.get('email') ?? '').trim(),
+    message: String(form.get('message') ?? '').trim(),
+  };
+
+  if (values.name.length < 2) errors.name = 'Indiquez votre nom.';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) errors.email = 'Adresse e-mail invalide.';
+  if (values.message.length < 10) errors.message = 'Votre message doit faire au moins 10 caractères.';
+
+  // Champ « pot de miel » : invisible pour un humain, souvent rempli par les robots de spam.
+  const isBot = String(form.get('website') ?? '') !== '';
+
+  if (Object.keys(errors).length === 0) {
+    if (!isBot) {
+      // En production : envoi d'un e-mail ou enregistrement en base. Ici, on journalise.
+      console.info(`[contact] Message de ${values.name} <${values.email}>`);
+    }
+    sent = true;
+  } else {
+    Astro.response.status = 400;
+  }
+}
+
+// Une réponse personnalisée ne doit pas être mise en cache.
+Astro.response.headers.set('Cache-Control', 'no-store');
 ---
 
 <BaseLayout
   title="Contact"
   description={`Contactez ${SITE.author} pour une mission freelance, un projet web ou une collaboration.`}
 >
-  <section class="section container">
+  <section class="section container contact">
     <h1>Contact</h1>
     <p class="lead">Un projet, une mission freelance ou simplement une question ? Écrivez-moi, je réponds sous 48 h.</p>
 
+    {
+      sent ? (
+        <p class="notice" role="status">
+          Merci {values.name}, votre message a bien été envoyé. Je vous réponds au plus vite.
+        </p>
+      ) : (
+        <form method="post" novalidate>
+          <div class="field">
+            <label for="name">Nom</label>
+            <input id="name" name="name" autocomplete="name" required value={values.name} aria-invalid={errors.name ? 'true' : undefined} aria-describedby={errors.name ? 'name-error' : undefined} />
+            {errors.name && <p id="name-error" class="error">{errors.name}</p>}
+          </div>
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" required value={values.email} aria-invalid={errors.email ? 'true' : undefined} aria-describedby={errors.email ? 'email-error' : undefined} />
+            {errors.email && <p id="email-error" class="error">{errors.email}</p>}
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="6" required aria-invalid={errors.message ? 'true' : undefined} aria-describedby={errors.message ? 'message-error' : undefined}>{values.message}</textarea>
+            {errors.message && <p id="message-error" class="error">{errors.message}</p>}
+          </div>
+          <div class="honeypot" aria-hidden="true">
+            <label for="website">Ne pas remplir</label>
+            <input id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+          <button class="button" type="submit">Envoyer</button>
+        </form>
+      )
+    }
+
+    <h2>Autres moyens de me joindre</h2>
     <ul>
       <li>E-mail : <a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
       <li>GitHub : <a href={SITE.socials.github}>{SITE.socials.github.replace('https://', '')}</a></li>
@@ -18,3 +89,65 @@ import { SITE } from '../data/site';
     </ul>
   </section>
 </BaseLayout>
+
+<style>
+  .contact {
+    max-width: 44rem;
+  }
+
+  form {
+    display: grid;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+  }
+
+  .field {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  label {
+    font-weight: 600;
+  }
+
+  input,
+  textarea {
+    font: inherit;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+  }
+
+  [aria-invalid='true'] {
+    border-color: #b91c1c;
+  }
+
+  .error {
+    margin: 0;
+    color: #b91c1c;
+    font-size: 0.9rem;
+  }
+
+  .notice {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    background: #ecfdf5;
+    color: #065f46;
+  }
+
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+  }
+
+  button {
+    justify-self: start;
+    border: 0;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+</style>
