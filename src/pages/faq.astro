@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { faqSchema, graph } from '../utils/schema';
+
+const faq = (await getCollection('faq')).map(({ id, data }) => ({ id, ...data }));
+---
+
+<BaseLayout
+  title="Questions fréquentes"
+  description="Disponibilité, technologies, délais, référencement : les réponses aux questions les plus fréquentes avant de démarrer un projet."
+>
+  <JsonLd slot="head" schema={graph(faqSchema(faq))} />
+
+  <section class="section container faq">
+    <h1>Questions fréquentes</h1>
+    <p class="lead">Les réponses aux questions qu'on me pose le plus souvent avant de démarrer un projet.</p>
+
+    {
+      faq.map(({ id, question, answer }) => (
+        <section class="item" aria-labelledby={id}>
+          <h2 id={id}>{question}</h2>
+          <p>{answer}</p>
+        </section>
+      ))
+    }
+
+    <p>Une autre question ? <a href="/contact/">Écrivez-moi</a>.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .faq {
+    max-width: 48rem;
+  }
+
+  .item {
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .item h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .item p {
+    margin: 0;
+  }
+</style>

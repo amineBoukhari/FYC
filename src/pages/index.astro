@@ -5,6 +5,8 @@ import Hero from '../components/Hero.astro';
 import Card from '../components/Card.astro';
 import { SITE } from '../data/site';
 import { formatDate } from '../utils/format';
+import JsonLd from '../components/JsonLd.astro';
+import { graph, personSchema, websiteSchema } from '../utils/schema';
 
 const skills = [
   {
@@ -28,6 +30,7 @@ const posts = (await getCollection('blog'))
 ---
 
 <BaseLayout title="Développement web front-end">
+  <JsonLd slot="head" schema={graph(websiteSchema(Astro.site!), personSchema(Astro.site!))} />
   <Hero
     title="Je conçois des sites web rapides, accessibles et bien référencés"
     subtitle={`${SITE.author}, ${SITE.role.toLowerCase()} à ${SITE.city}.`}

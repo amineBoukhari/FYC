@@ -55,6 +55,7 @@ npm run dev        # http://localhost:4321
 | `video-07` | Performance et Core Web Vitals       | Images via `astro:assets` (WebP, `srcset`, `priority`), mesures Lighthouse avant/après |
 | `video-08` | Les fondamentaux techniques du SEO   | URL canoniques (`trailingSlash`, 301), page 404, hiérarchie des titres, fil d'Ariane, maillage interne |
 | `video-09` | Implémenter le SEO on-page dans Astro | Composant `SEO` (title, canonical, Open Graph), `site`, sitemap, robots.txt     |
+| `video-10` | Données structurées et JSON-LD      | `Person`, `WebSite`, `ProfilePage`, `BlogPosting`, `CreativeWork`, `BreadcrumbList`, page `/faq/` + `FAQPage` |
 
 ### Vidéo 04 — Prise en main
 
@@ -119,3 +120,11 @@ npm run dev        # http://localhost:4321
 - **Sitemap** : `@astrojs/sitemap` génère `sitemap-index.xml` au build. La page SSR `/contact/` n'est pas connue au build : elle est ajoutée via `customPages`.
 - **`robots.txt`** : un endpoint statique (`src/pages/robots.txt.ts`) qui référence le sitemap à partir de `site`.
 - Vérifier : `npm run build` puis ouvrez `dist/client/sitemap-0.xml` et `dist/client/robots.txt` ; testez l'aperçu de partage d'une page avec un outil de prévisualisation Open Graph une fois le site en ligne.
+
+### Vidéo 10 — Données structurées et JSON-LD
+
+- `src/utils/schema.ts` regroupe les générateurs Schema.org ; `src/components/JsonLd.astro` les injecte dans le `<head>` (slot nommé `head` du layout).
+- Accueil : `WebSite` + `Person` · À propos : `ProfilePage` · Articles : `BlogPosting` + `BreadcrumbList` · Projets : `CreativeWork` + `BreadcrumbList` · FAQ : `FAQPage`.
+- Nouvelle collection `faq` (loader `file()` sur `src/content/faq.json`) et page `/faq/`.
+- Les entités sont reliées par `@id` (l'auteur des articles **est** la `Person` de l'accueil).
+- Validation et limites des résultats enrichis (notamment FAQ) : [`docs/donnees-structurees.md`](docs/donnees-structurees.md).

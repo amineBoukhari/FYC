@@ -1,0 +1,12 @@
+---
+interface Props {
+  schema: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { schema } = Astro.props;
+
+// `<` échappé : une chaîne contenant « </script> » ne peut pas fermer la balise prématurément.
+const json = JSON.stringify(schema).replace(/</g, '\\u003c');
+---
+
+<script is:inline type="application/ld+json" set:html={json} />

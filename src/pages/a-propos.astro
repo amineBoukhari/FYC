@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE } from '../data/site';
+import JsonLd from '../components/JsonLd.astro';
+import { graph, profilePageSchema } from '../utils/schema';
 
 const timeline = [
   { period: '2024 – aujourd’hui', title: 'Développement front-end en freelance', place: SITE.city },
@@ -16,6 +18,8 @@ const stack = ['HTML', 'CSS', 'TypeScript', 'Astro', 'React', 'Svelte', 'Node.js
   type="profile"
   description={`${SITE.author} : parcours, compétences et méthode de travail en développement front-end et performance web.`}
 >
+  <JsonLd slot="head" schema={graph(profilePageSchema(Astro.site!))} />
+
   <article class="section container about">
     <h1>À propos</h1>
     <p class="lead">Je m’appelle {SITE.author}. Depuis plusieurs années, je conçois des sites web qui se chargent vite, fonctionnent pour tout le monde et se trouvent facilement sur les moteurs de recherche.</p>

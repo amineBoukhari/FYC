@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 // Études de cas : du Markdown pur, avec des métadonnées strictement typées.
@@ -35,4 +35,13 @@ const blog = defineCollection({
     }),
 });
 
-export const collections = { projets, blog };
+// Questions fréquentes : un seul fichier JSON, une entrée par question (loader file()).
+const faq = defineCollection({
+  loader: file('./src/content/faq.json'),
+  schema: z.object({
+    question: z.string().endsWith('?'),
+    answer: z.string(),
+  }),
+});
+
+export const collections = { projets, blog, faq };

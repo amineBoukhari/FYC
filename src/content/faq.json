@@ -1,0 +1,27 @@
+[
+  {
+    "id": "disponibilite",
+    "question": "Êtes-vous disponible pour une mission freelance ?",
+    "answer": "Oui. Je suis disponible à partir de janvier 2027 pour des missions à temps partiel ou à temps plein, à distance ou sur Lyon."
+  },
+  {
+    "id": "technologies",
+    "question": "Avec quelles technologies travaillez-vous ?",
+    "answer": "Principalement Astro, TypeScript, React et Svelte côté front-end, Node.js côté serveur, ainsi que Docker et GitHub Actions pour le déploiement."
+  },
+  {
+    "id": "delai",
+    "question": "Combien de temps faut-il pour réaliser un site vitrine ?",
+    "answer": "Comptez en général 3 à 6 semaines pour un site vitrine de 5 à 10 pages, selon la quantité de contenu à produire et le nombre d'allers-retours."
+  },
+  {
+    "id": "referencement",
+    "question": "Le référencement est-il inclus dans vos prestations ?",
+    "answer": "Le SEO technique est inclus : performance, balisage sémantique, données structurées, sitemap et URL propres. La rédaction de contenus et le netlinking ne le sont pas."
+  },
+  {
+    "id": "reprise",
+    "question": "Pouvez-vous reprendre un site existant ?",
+    "answer": "Oui. Je commence par un audit (performance, accessibilité, référencement) puis je propose soit des corrections ciblées, soit une migration, par exemple vers Astro."
+  }
+]
