@@ -25,6 +25,8 @@ npm run dev        # http://localhost:4321
 | `npm run build`   | Génère le site de production dans `dist/`          |
 | `npm run preview` | Sert le build dans le runtime Cloudflare local (workerd) |
 
+> L'URL publique du site (utilisée pour les URL canoniques, Open Graph et le sitemap) se règle au build : `SITE_URL=https://mon-domaine.fr npm run build`.
+
 ## Arborescence
 
 ```text
@@ -52,6 +54,7 @@ npm run dev        # http://localhost:4321
 | `video-06` | Structurer le contenu (Content Collections) | Collections `projets` et `blog` typées avec Zod, pages liste + détail, MDX |
 | `video-07` | Performance et Core Web Vitals       | Images via `astro:assets` (WebP, `srcset`, `priority`), mesures Lighthouse avant/après |
 | `video-08` | Les fondamentaux techniques du SEO   | URL canoniques (`trailingSlash`, 301), page 404, hiérarchie des titres, fil d'Ariane, maillage interne |
+| `video-09` | Implémenter le SEO on-page dans Astro | Composant `SEO` (title, canonical, Open Graph), `site`, sitemap, robots.txt     |
 
 ### Vidéo 04 — Prise en main
 
@@ -108,3 +111,11 @@ npm run dev        # http://localhost:4321
 - **Maillage interne** : composant `Breadcrumbs`, blocs « À lire aussi » et « Projets similaires », lien auteur → `/a-propos/`.
 - **Page 404** personnalisée (`src/pages/404.astro`), servie avec le bon code HTTP.
 - Panorama des briques SEO et de la vidéo où chacune est traitée : [`docs/seo-fondamentaux.md`](docs/seo-fondamentaux.md).
+
+### Vidéo 09 — Implémenter le SEO on-page dans Astro
+
+- **`site`** dans `astro.config.mjs` (surchargeable via `SITE_URL`) : sans lui, impossible de produire des URL absolues.
+- **Composant `SEO.astro`**, appelé par `BaseLayout` : `title`, `meta description`, **URL canonique** (sans paramètres de requête), Open Graph (`og:title`, `og:image` 1200×630 recadrée depuis la couverture via `getImage()`…), carte Twitter, `noindex` optionnel (utilisé par la 404).
+- **Sitemap** : `@astrojs/sitemap` génère `sitemap-index.xml` au build. La page SSR `/contact/` n'est pas connue au build : elle est ajoutée via `customPages`.
+- **`robots.txt`** : un endpoint statique (`src/pages/robots.txt.ts`) qui référence le sitemap à partir de `site`.
+- Vérifier : `npm run build` puis ouvrez `dist/client/sitemap-0.xml` et `dist/client/robots.txt` ; testez l'aperçu de partage d'une page avec un outil de prévisualisation Open Graph une fois le site en ligne.

@@ -20,7 +20,7 @@ const related = projets
   .slice(0, 2);
 ---
 
-<BaseLayout title={`${data.title} — étude de cas`} description={data.summary}>
+<BaseLayout title={`${data.title} — étude de cas`} description={data.summary} image={data.cover} imageAlt={data.coverAlt}>
   <article class="section container project">
     <Breadcrumbs
       items={[

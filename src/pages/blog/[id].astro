@@ -24,7 +24,15 @@ const related = posts
   .map(({ other }) => other);
 ---
 
-<BaseLayout title={data.title} description={data.description}>
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  type="article"
+  image={data.cover}
+  imageAlt={data.coverAlt}
+  publishedTime={data.pubDate}
+  modifiedTime={data.updatedDate}
+>
   <article class="section container post">
     <Breadcrumbs
       items={[

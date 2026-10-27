@@ -3,6 +3,11 @@ import { writeFile } from 'node:fs/promises';
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
+
+// URL publique du site : indispensable pour les URL absolues (canonical, Open Graph, sitemap).
+// À surcharger au build : SITE_URL=https://mon-domaine.fr npm run build
+const SITE_URL = process.env.SITE_URL ?? 'https://alex-morel.example.com';
 
 // Cloudflare ajoute le slash final avec une redirection 307 (temporaire).
 // Cette mini-intégration génère un fichier _redirects pour imposer des 301 (permanentes) à la place.
@@ -23,6 +28,8 @@ const redirections301 = {
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
+  site: SITE_URL,
+
   // 'static' (défaut) : toutes les pages sont générées au build (SSG).
   // Une page peut passer en rendu à la demande (SSR) avec `export const prerender = false`.
   // => c'est le mode « hybride » : statique par défaut, serveur là où c'est utile.
@@ -43,5 +50,11 @@ export default defineConfig({
     redirections301,
     // MDX : Markdown + composants, pour les articles qui en ont besoin.
     mdx(),
+    // Sitemap généré au build à partir des pages prérendues.
+    sitemap({
+      // Les pages SSR ne sont pas connues au build : on les déclare explicitement.
+      customPages: [new URL('/contact/', SITE_URL).href],
+      filter: (page) => !page.includes('/404'),
+    }),
   ],
 });
