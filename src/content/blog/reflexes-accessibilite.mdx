@@ -1,0 +1,40 @@
+---
+title: Mes 5 réflexes accessibilité en développement front-end
+description: HTML sémantique, alternatives textuelles, contrastes, clavier, formulaires, cinq habitudes simples pour des interfaces utilisables par tous.
+pubDate: 2026-10-08
+cover: /images/blog/reflexes-accessibilite.jpg
+coverAlt: Aperçu stylisé de code illustrant l'accessibilité web
+tags: [accessibilité, html, front-end]
+---
+
+import Callout from '../../components/Callout.astro';
+
+L'accessibilité n'est pas une couche qu'on ajoute à la fin d'un projet : ce sont des habitudes de développement. Voici les cinq que j'applique systématiquement.
+
+## 1. Utiliser le bon élément HTML
+
+Un `<button>` est focalisable, activable au clavier et annoncé comme bouton par les lecteurs d'écran. Une `<div>` cliquable, non. Avant d'écrire du JavaScript ou de l'ARIA, je vérifie s'il existe un élément natif qui fait déjà le travail.
+
+## 2. Décrire les images
+
+Chaque image porteuse de sens a un attribut `alt` qui décrit son contenu. Une image purement décorative reçoit un `alt=""` vide, pour être ignorée par les lecteurs d'écran.
+
+<Callout title="Bonus SEO">
+  Le HTML sémantique et les textes alternatifs servent aussi les moteurs de recherche : ils les aident à comprendre la structure et le contenu de la page.
+</Callout>
+
+## 3. Vérifier les contrastes
+
+Les WCAG demandent un contraste d'au moins **4,5:1** pour le texte courant et **3:1** pour le texte de grande taille. Les DevTools des navigateurs l'indiquent directement dans le sélecteur de couleur.
+
+## 4. Tout faire au clavier
+
+Je parcours chaque page avec la touche Tab : tous les éléments interactifs doivent être atteignables, dans un ordre logique, avec un indicateur de focus visible.
+
+## 5. Des formulaires explicites
+
+Chaque champ a un `<label>` associé. Les messages d'erreur sont reliés au champ avec `aria-describedby` et le champ en erreur est signalé par `aria-invalid`.
+
+<Callout title="À tester soi-même" tone="info">
+  Le formulaire de contact de ce portfolio applique ces règles : envoyez-le vide et observez le HTML renvoyé par le serveur.
+</Callout>

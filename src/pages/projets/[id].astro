@@ -1,0 +1,79 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// SSG : une page HTML est générée au build pour chaque fichier de la collection.
+export async function getStaticPaths() {
+  const projets = await getCollection('projets');
+  return projets.map((projet) => ({ params: { id: projet.id }, props: { projet } }));
+}
+
+const { projet } = Astro.props;
+const { data } = projet;
+const { Content } = await render(projet);
+---
+
+<BaseLayout title={`${data.title} — étude de cas`} description={data.summary}>
+  <article class="section container project">
+    <header>
+      <h1>{data.title}</h1>
+      <p class="lead">{data.summary}</p>
+      <dl>
+        <div>
+          <dt>Année</dt>
+          <dd>{data.year}</dd>
+        </div>
+        <div>
+          <dt>Rôle</dt>
+          <dd>{data.role}</dd>
+        </div>
+        {
+          data.demo && (
+            <div>
+              <dt>En ligne</dt>
+              <dd>
+                <a href={data.demo}>{data.demo.replace('https://', '')}</a>
+              </dd>
+            </div>
+          )
+        }
+      </dl>
+      <ul class="tags" aria-label="Technologies">
+        {data.stack.map((tech) => <li>{tech}</li>)}
+      </ul>
+    </header>
+
+    <img src={data.cover} alt={data.coverAlt} />
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project {
+    max-width: 48rem;
+  }
+
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+  }
+
+  dt {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  img {
+    margin-block: 2rem;
+    border-radius: var(--radius);
+  }
+</style>

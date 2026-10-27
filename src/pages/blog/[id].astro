@@ -1,0 +1,55 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../data/site';
+import { formatDate } from '../../utils/format';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { data } = post;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={data.title} description={data.description}>
+  <article class="section container post">
+    <header>
+      <h1>{data.title}</h1>
+      <p class="meta">
+        Par {SITE.author} — publié le <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time>
+      </p>
+      <ul class="tags" aria-label="Thèmes">
+        {data.tags.map((tag) => <li>{tag}</li>)}
+      </ul>
+    </header>
+    <img src={data.cover} alt={data.coverAlt} />
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    max-width: 48rem;
+  }
+
+  .meta {
+    color: var(--color-muted);
+  }
+
+  img {
+    border-radius: var(--radius);
+    margin-block: 2rem;
+  }
+
+  .prose :global(pre) {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    font-size: 0.9rem;
+  }
+</style>

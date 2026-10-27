@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../../components/Card.astro';
+
+const projets = (await getCollection('projets')).sort((a, b) => b.data.year - a.data.year);
+---
+
+<BaseLayout
+  title="Projets"
+  description="Sélection de projets web : sites statiques, applications React, PWA et e-commerce, avec la stack utilisée pour chacun."
+>
+  <section class="section container">
+    <h1>Projets</h1>
+    <p class="lead">Une sélection de projets personnels et professionnels, présentés sous forme d'études de cas.</p>
+
+    <div class="grid">
+      {
+        projets.map(({ id, data }) => (
+          <Card title={data.title} href={`/projets/${id}`} image={data.cover} imageAlt={data.coverAlt}>
+            <p>{data.summary}</p>
+            <ul class="tags" aria-label="Technologies">
+              {data.stack.map((tech) => <li>{tech}</li>)}
+            </ul>
+          </Card>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

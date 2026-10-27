@@ -2,22 +2,37 @@
 interface Props {
   title: string;
   href?: string;
+  image?: string;
+  imageAlt?: string;
 }
 
-const { title, href } = Astro.props;
+const { title, href, image, imageAlt = '' } = Astro.props;
 ---
 
 <article class="card">
-  <h3>{href ? <a href={href}>{title}</a> : title}</h3>
-  <slot />
+  {image && <img src={image} alt={imageAlt} />}
+  <div class="body">
+    <h3>{href ? <a href={href}>{title}</a> : title}</h3>
+    <slot />
+  </div>
 </article>
 
 <style>
   .card {
-    padding: 1.5rem;
+    overflow: hidden;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
+  }
+
+  img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+
+  .body {
+    padding: 1.5rem;
   }
 
   h3 {

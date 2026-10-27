@@ -1,9 +1,10 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import Card from '../components/Card.astro';
 import { SITE } from '../data/site';
-import { projects } from '../data/projects';
+import { formatDate } from '../utils/format';
 
 const skills = [
   {
@@ -19,6 +20,11 @@ const skills = [
     text: 'Balisage, données structurées, sitemap : des sites que les moteurs comprennent et indexent.',
   },
 ];
+
+const featured = (await getCollection('projets', ({ data }) => data.featured)).sort((a, b) => b.data.year - a.data.year);
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
 <BaseLayout title="Développement web front-end">
@@ -46,17 +52,31 @@ const skills = [
   </section>
 
   <section class="section container">
-    <h2>Projets récents</h2>
+    <h2>Projets à la une</h2>
     <div class="grid">
       {
-        projects.slice(0, 3).map(({ title, description }) => (
-          <Card title={title}>
-            <p>{description}</p>
+        featured.map(({ id, data }) => (
+          <Card title={data.title} href={`/projets/${id}`} image={data.cover} imageAlt={data.coverAlt}>
+            <p>{data.summary}</p>
           </Card>
         ))
       }
     </div>
     <p><a href="/projets">Tous les projets →</a></p>
+  </section>
+
+  <section class="section container">
+    <h2>Derniers articles</h2>
+    <ul class="posts">
+      {
+        posts.map(({ id, data }) => (
+          <li>
+            <a href={`/blog/${id}`}>{data.title}</a>
+            <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 </BaseLayout>
 
@@ -65,5 +85,26 @@ const skills = [
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
+  }
+
+  .posts {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .posts li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .posts time {
+    color: var(--color-muted);
+    font-size: 0.9rem;
   }
 </style>

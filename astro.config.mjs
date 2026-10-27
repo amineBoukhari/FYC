@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
+import mdx from '@astrojs/mdx';
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
@@ -14,4 +15,7 @@ export default defineConfig({
   adapter: cloudflare({ imageService: 'compile' }),
   // Aucune session utilisée : évite de provisionner un espace de stockage KV au déploiement.
   session: false,
+
+  // MDX : Markdown + composants, pour les articles qui en ont besoin.
+  integrations: [mdx()],
 });
