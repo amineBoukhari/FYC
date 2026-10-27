@@ -24,6 +24,7 @@ npm run dev        # http://localhost:4321
 | `npm run dev`     | Serveur de développement avec rechargement à chaud |
 | `npm run build`   | Génère le site de production dans `dist/`          |
 | `npm run preview` | Sert le build dans le runtime Cloudflare local (workerd) |
+| `npm run audit:geo` | Audit GEO du HTML généré (après build)           |
 
 > L'URL publique du site (utilisée pour les URL canoniques, Open Graph et le sitemap) se règle au build : `SITE_URL=https://mon-domaine.fr npm run build`.
 
@@ -32,6 +33,7 @@ npm run dev        # http://localhost:4321
 ```text
 ├── docs/                # Mesures et notes de cours (performance, audits…)
 ├── public/              # Fichiers servis tels quels, sans traitement (favicon)
+├── scripts/             # Outils (audit GEO)
 ├── src/
 │   ├── assets/          # Images sources, optimisées au build par astro:assets
 │   ├── components/      # Composants .astro réutilisables
@@ -56,6 +58,7 @@ npm run dev        # http://localhost:4321
 | `video-08` | Les fondamentaux techniques du SEO   | URL canoniques (`trailingSlash`, 301), page 404, hiérarchie des titres, fil d'Ariane, maillage interne |
 | `video-09` | Implémenter le SEO on-page dans Astro | Composant `SEO` (title, canonical, Open Graph), `site`, sitemap, robots.txt     |
 | `video-10` | Données structurées et JSON-LD      | `Person`, `WebSite`, `ProfilePage`, `BlogPosting`, `CreativeWork`, `BreadcrumbList`, page `/faq/` + `FAQPage` |
+| `video-11` | Comprendre le GEO                    | Script `audit:geo`, grille d'audit de l'état actuel, note sur le fonctionnement des moteurs génératifs |
 
 ### Vidéo 04 — Prise en main
 
@@ -128,3 +131,9 @@ npm run dev        # http://localhost:4321
 - Nouvelle collection `faq` (loader `file()` sur `src/content/faq.json`) et page `/faq/`.
 - Les entités sont reliées par `@id` (l'auteur des articles **est** la `Person` de l'accueil).
 - Validation et limites des résultats enrichis (notamment FAQ) : [`docs/donnees-structurees.md`](docs/donnees-structurees.md).
+
+### Vidéo 11 — Comprendre le GEO
+
+- Fonctionnement d'un moteur de réponse (exploration → récupération de passages → génération → citation) et ce qui rend un passage « citable » : [`docs/geo-comprendre.md`](docs/geo-comprendre.md).
+- **Mesurer avant d'optimiser** : `npm run build && npm run audit:geo` analyse chaque page générée (un seul `h1`, hiérarchie des titres, réponse directe en tête, meta description, JSON-LD, date, titres en questions, listes/tableaux) et la présence d'un `llms.txt`.
+- Résultat actuel : **76 / 97 critères, 7 échecs bloquants**. Grille commentée et priorités : [`docs/audit-geo.md`](docs/audit-geo.md).
