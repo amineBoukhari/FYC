@@ -4,7 +4,7 @@ summary: Vitrine e-commerce éditoriale pour un torréfacteur artisanal, avec fi
 year: 2025
 role: Développement front-end et intégration
 stack: [Astro, Stripe, Tailwind CSS]
-cover: /images/projets/boutique-orbite.jpg
+cover: ../../assets/projets/boutique-orbite.jpg
 coverAlt: Aperçu stylisé du code source de Boutique Orbite
 demo: https://boutique-orbite.example.com
 featured: true

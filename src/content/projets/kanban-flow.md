@@ -4,7 +4,7 @@ summary: Application de gestion de tâches collaborative avec glisser-déposer e
 year: 2025
 role: Développement front-end et API
 stack: [React, TypeScript, Node.js, PostgreSQL, WebSocket]
-cover: /images/projets/kanban-flow.jpg
+cover: ../../assets/projets/kanban-flow.jpg
 coverAlt: Aperçu stylisé du code source de Kanban Flow
 featured: true
 ---

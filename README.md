@@ -28,8 +28,10 @@ npm run dev        # http://localhost:4321
 ## Arborescence
 
 ```text
-├── public/              # Fichiers servis tels quels (favicon, images brutes)
+├── docs/                # Mesures et notes de cours (performance, audits…)
+├── public/              # Fichiers servis tels quels, sans traitement (favicon)
 ├── src/
+│   ├── assets/          # Images sources, optimisées au build par astro:assets
 │   ├── components/      # Composants .astro réutilisables
 │   ├── content/         # Contenu éditorial : projets/ (.md) et blog/ (.md, .mdx)
 │   ├── content.config.ts # Schémas des Content Collections
@@ -48,6 +50,7 @@ npm run dev        # http://localhost:4321
 | `video-04` | Prise en main : premier projet Astro | Projet initial, layout, composants, 4 pages (accueil, projets, à propos, contact) |
 | `video-05` | Modes de rendu : SSG, SSR et hybride | Adaptateur Cloudflare, formulaire de contact traité côté serveur (SSR)        |
 | `video-06` | Structurer le contenu (Content Collections) | Collections `projets` et `blog` typées avec Zod, pages liste + détail, MDX |
+| `video-07` | Performance et Core Web Vitals       | Images via `astro:assets` (WebP, `srcset`, `priority`), mesures Lighthouse avant/après |
 
 ### Vidéo 04 — Prise en main
 
@@ -82,3 +85,17 @@ npm run dev        # http://localhost:4321
 - La liste statique `src/data/projects.ts` disparaît : l'accueil affiche désormais les projets `featured: true` et les 3 derniers articles.
 
 > L'article `ssg-ssr-csr.md` est **volontairement mal structuré** (longue introduction, réponse en toute fin, titres `h3` directement sous le `h1`). Il servira de cas d'étude pour l'audit GEO (vidéos 11 et 12).
+
+### Vidéo 07 — Performance et Core Web Vitals
+
+| Accueil (mobile) | Avant | Après |
+| ---------------- | ----- | ----- |
+| Score performance | 74   | 99    |
+| LCP               | 22,3 s | 1,0 s |
+| Poids de la page  | 4 025 Kio | 51 Kio |
+
+- Les images quittent `public/` (servi **sans traitement**) pour `src/assets/` : importées, elles passent par le pipeline `astro:assets`.
+- `<Image />` génère du WebP en plusieurs tailles (`widths` + `sizes` → `srcset`) et ajoute `width` / `height` (plus de décalage de mise en page : CLS = 0).
+- `priority` sur l'image candidate au LCP (hero, couverture d'article) : `loading="eager"` + `fetchpriority="high"`. Les autres images restent en `loading="lazy"`.
+- Dans les collections, le helper `image()` du schéma remplace la simple chaîne de caractères : un chemin d'image erroné fait échouer le build.
+- Détail des mesures et méthode : [`docs/performance.md`](docs/performance.md).

@@ -4,7 +4,7 @@ summary: Application web progressive (PWA) de prévisions météo, installable e
 year: 2024
 role: Projet personnel
 stack: [Svelte, Service Worker, Open-Meteo]
-cover: /images/projets/meteo-locale.jpg
+cover: ../../assets/projets/meteo-locale.jpg
 coverAlt: Aperçu stylisé du code source de Météo Locale
 ---
 

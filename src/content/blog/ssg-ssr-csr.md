@@ -2,7 +2,7 @@
 title: SSG, SSR ou CSR, quel mode de rendu choisir ?
 description: Génération statique, rendu serveur ou rendu client, retour d'expérience sur le choix du mode de rendu d'un site web.
 pubDate: 2026-09-10
-cover: /images/blog/ssg-ssr-csr.jpg
+cover: ../../assets/blog/ssg-ssr-csr.jpg
 coverAlt: Aperçu stylisé de code illustrant les modes de rendu
 tags: [astro, rendu, performance]
 ---

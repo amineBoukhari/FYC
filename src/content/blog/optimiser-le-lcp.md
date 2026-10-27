@@ -2,7 +2,7 @@
 title: Comment j'ai divisé par trois le LCP d'une page d'accueil
 description: Image trop lourde, mauvais chargement, rendu bloquant. Retour sur l'optimisation du Largest Contentful Paint d'un site vitrine.
 pubDate: 2026-09-24
-cover: /images/blog/optimiser-le-lcp.jpg
+cover: ../../assets/blog/optimiser-le-lcp.jpg
 coverAlt: Aperçu stylisé de code illustrant l'optimisation du LCP
 tags: [performance, core-web-vitals, images]
 ---

@@ -1,8 +1,11 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
   title: string;
   href?: string;
-  image?: string;
+  image?: ImageMetadata;
   imageAlt?: string;
 }
 
@@ -10,7 +13,16 @@ const { title, href, image, imageAlt = '' } = Astro.props;
 ---
 
 <article class="card">
-  {image && <img src={image} alt={imageAlt} />}
+  {
+    image && (
+      <Image
+        src={image}
+        alt={imageAlt}
+        widths={[400, 800]}
+        sizes="(min-width: 72rem) 23rem, (min-width: 40rem) 45vw, 100vw"
+      />
+    )
+  }
   <div class="body">
     <h3>{href ? <a href={href}>{title}</a> : title}</h3>
     <slot />
@@ -27,6 +39,7 @@ const { title, href, image, imageAlt = '' } = Astro.props;
 
   img {
     width: 100%;
+    height: auto;
     aspect-ratio: 16 / 10;
     object-fit: cover;
   }

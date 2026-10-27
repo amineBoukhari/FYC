@@ -4,7 +4,7 @@ summary: Site de documentation statique pour une bibliothèque open source, avec
 year: 2026
 role: Conception et développement
 stack: [Astro, MDX, Pagefind, GitHub Actions]
-cover: /images/projets/docs-studio.jpg
+cover: ../../assets/projets/docs-studio.jpg
 coverAlt: Aperçu stylisé du code source de Docs Studio
 demo: https://docs-studio.example.com
 featured: true

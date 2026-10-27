@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import hero from '../assets/hero.jpg';
+
 interface Props {
   title: string;
   subtitle: string;
@@ -8,7 +11,12 @@ const { title, subtitle } = Astro.props;
 ---
 
 <section class="hero">
-  <img src="/images/hero.jpg" alt="Capture stylisée d’un éditeur de code" />
+  <!--
+    Image décorative (alt vide) mais candidate au LCP :
+    - priority : pas de lazy-loading + fetchpriority="high"
+    - widths/sizes : le navigateur télécharge la taille adaptée à l'écran (WebP)
+  -->
+  <Image src={hero} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" priority />
   <div class="container content">
     <slot name="eyebrow" />
     <h1>{title}</h1>
