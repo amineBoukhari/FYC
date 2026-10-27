@@ -67,6 +67,7 @@ npm run dev        # http://localhost:4321
 | `video-12` | Optimiser un site Astro pour le GEO  | Article et accueil restructurés (réponse directe, questions, tableau, FAQ), `CollectionPage`, `llms.txt` |
 | `video-13` | Écosystème et intégrations Astro     | Premier îlot : filtre de projets en Preact (`client:idle`), poids JS mesuré, panorama des intégrations |
 | `video-14` | Déployer et industrialiser            | Déploiement Cloudflare (`wrangler`), CI GitHub Actions : `astro check`, audit GEO strict, Lighthouse CI, déploiement |
+| `video-15` | Bilan et retour d'expérience          | Check-list SEO/GEO réutilisable, synthèse chiffrée, trame de retour d'expérience |
 
 ### Vidéo 04 — Prise en main
 
@@ -171,3 +172,8 @@ npm run dev        # http://localhost:4321
 - **CI GitHub Actions** (`.github/workflows/ci.yml`) : `astro check` → build → audit GEO `--strict` → **Lighthouse CI** avec seuils (`lighthouserc.cjs`) → **déploiement sur Cloudflare** depuis `main`, seulement si tout est au vert.
 - **Suivi dans le temps** : rapports Lighthouse et audit GEO conservés en artefacts à chaque exécution ; Cloudflare Web Analytics pour les Core Web Vitals des vrais visiteurs.
 - Mise en place (jeton API, identifiant de compte, `SITE_URL`) et détails : [`docs/deploiement.md`](docs/deploiement.md).
+
+### Vidéo 15 — Bilan et retour d'expérience
+
+- **Check-list SEO / GEO réutilisable**, chaque point renvoyant au tag où il est implémenté : [`docs/checklist-seo-geo.md`](docs/checklist-seo-geo.md).
+- **Synthèse chiffrée** (performance, JavaScript envoyé, audit GEO), idées à retenir et trame du retour d'expérience du groupe : [`docs/bilan.md`](docs/bilan.md).
