@@ -1,0 +1,11 @@
+// Configuration du Worker Cloudflare (lue par `wrangler deploy` et par `astro preview`).
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Nom du Worker : l'URL par défaut sera https://portfolio-fil-rouge.<sous-domaine>.workers.dev
+  "name": "portfolio-fil-rouge",
+  "compatibility_date": "2026-10-19",
+  // Point d'entrée fourni par l'adaptateur Astro (pages SSR) ; les fichiers statiques sont servis par le CDN.
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  // Journaux et métriques du Worker visibles dans le tableau de bord Cloudflare.
+  "observability": { "enabled": true }
+}

@@ -25,12 +25,15 @@ npm run dev        # http://localhost:4321
 | `npm run build`   | Génère le site de production dans `dist/`          |
 | `npm run preview` | Sert le build dans le runtime Cloudflare local (workerd) |
 | `npm run audit:geo` | Audit GEO du HTML généré (après build)           |
+| `npm run check`   | Vérification des types (TypeScript + fichiers `.astro`) |
+| `npm run deploy`  | Déploie le build sur Cloudflare (`wrangler deploy`) |
 
 > L'URL publique du site (utilisée pour les URL canoniques, Open Graph et le sitemap) se règle au build : `SITE_URL=https://mon-domaine.fr npm run build`.
 
 ## Arborescence
 
 ```text
+├── .github/workflows/   # CI : vérification, audit, Lighthouse, déploiement
 ├── docs/                # Mesures et notes de cours (performance, audits…)
 ├── public/              # Fichiers servis tels quels, sans traitement (favicon)
 ├── scripts/             # Outils (audit GEO)
@@ -44,6 +47,8 @@ npm run dev        # http://localhost:4321
 │   ├── pages/           # Routage par fichiers : 1 fichier = 1 URL
 │   └── styles/          # CSS global
 ├── astro.config.mjs     # Configuration d'Astro
+├── lighthouserc.cjs     # Seuils Lighthouse CI
+├── wrangler.jsonc       # Configuration du Worker Cloudflare
 └── package.json
 ```
 
@@ -61,6 +66,7 @@ npm run dev        # http://localhost:4321
 | `video-11` | Comprendre le GEO                    | Script `audit:geo`, grille d'audit de l'état actuel, note sur le fonctionnement des moteurs génératifs |
 | `video-12` | Optimiser un site Astro pour le GEO  | Article et accueil restructurés (réponse directe, questions, tableau, FAQ), `CollectionPage`, `llms.txt` |
 | `video-13` | Écosystème et intégrations Astro     | Premier îlot : filtre de projets en Preact (`client:idle`), poids JS mesuré, panorama des intégrations |
+| `video-14` | Déployer et industrialiser            | Déploiement Cloudflare (`wrangler`), CI GitHub Actions : `astro check`, audit GEO strict, Lighthouse CI, déploiement |
 
 ### Vidéo 04 — Prise en main
 
@@ -158,3 +164,10 @@ npm run dev        # http://localhost:4321
 - `client:idle` : le composant est hydraté quand le navigateur est inactif. Les cartes restent du HTML statique : sans JavaScript, tous les projets s'affichent (amélioration progressive).
 - Poids : **≈ 11 Ko gzip, sur `/projets/` uniquement** ; les 11 autres pages n'envoient toujours aucun JavaScript.
 - Tableau des directives `client:*` et panorama des intégrations (UI, Tailwind, CMS headless, Pagefind, Partytown…) : [`docs/ecosysteme.md`](docs/ecosysteme.md).
+
+### Vidéo 14 — Déployer et industrialiser le projet
+
+- **Cloudflare** : `wrangler.jsonc` décrit le Worker ; `npm run deploy` publie `dist/client/` sur le CDN et `dist/server/` dans un Worker. `npx wrangler deploy --dry-run` vérifie la configuration sans compte.
+- **CI GitHub Actions** (`.github/workflows/ci.yml`) : `astro check` → build → audit GEO `--strict` → **Lighthouse CI** avec seuils (`lighthouserc.cjs`) → **déploiement sur Cloudflare** depuis `main`, seulement si tout est au vert.
+- **Suivi dans le temps** : rapports Lighthouse et audit GEO conservés en artefacts à chaque exécution ; Cloudflare Web Analytics pour les Core Web Vitals des vrais visiteurs.
+- Mise en place (jeton API, identifiant de compte, `SITE_URL`) et détails : [`docs/deploiement.md`](docs/deploiement.md).

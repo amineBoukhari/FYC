@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # Cloudflare (Wrangler)
 .wrangler/
+
+# Rapports de CI
+.lighthouseci/
+audit-geo.json

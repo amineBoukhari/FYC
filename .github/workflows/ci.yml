@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # URL publique du site (Settings → Secrets and variables → Actions → Variables).
+  SITE_URL: ${{ vars.SITE_URL || 'https://alex-morel.example.com' }}
+
+jobs:
+  build:
+    name: Vérifier, construire, auditer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Vérification des types (astro check)
+        run: npm run check
+      - name: Build
+        run: npm run build
+      - name: Audit GEO (échoue en cas de critère bloquant)
+        run: npm run audit:geo -- --strict --json audit-geo.json
+      - uses: actions/upload-artifact@v7
+        with:
+          name: audit-geo
+          path: audit-geo.json
+
+  lighthouse:
+    name: Lighthouse CI
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Mesurer et vérifier les seuils
+        run: npx --yes @lhci/cli@0.15.1 autorun
+      - name: Conserver les rapports (suivi dans le temps)
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-${{ github.sha }}
+          path: .lighthouseci
+
+  deploy:
+    name: Déployer sur Cloudflare
+    # Uniquement sur main, et seulement si le build, l'audit et Lighthouse sont au vert.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build, lighthouse]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ env.SITE_URL }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: wrangler deploy
+        run: npm run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
