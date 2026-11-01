@@ -177,3 +177,5 @@ npm run dev        # http://localhost:4321
 
 - **Check-list SEO / GEO réutilisable**, chaque point renvoyant au tag où il est implémenté : [`docs/checklist-seo-geo.md`](docs/checklist-seo-geo.md).
 - **Synthèse chiffrée** (performance, JavaScript envoyé, audit GEO), idées à retenir et trame du retour d'expérience du groupe : [`docs/bilan.md`](docs/bilan.md).
+#   F Y C  
+ 
